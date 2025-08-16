@@ -236,9 +236,9 @@ class InsurancePredictiveModels:
         X_test_scaled = self.scaler.transform(self.X_test_severity)
         
         models = {
-            'Linear Regression': LinearRegression(),
-            'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42),
-            'XGBoost': xgb.XGBRegressor(n_estimators=100, random_state=42)
+            # 'Linear Regression': LinearRegression(),
+            'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1),
+            # 'XGBoost': xgb.XGBRegressor(n_estimators=100, random_state=42)
         }
         
         results = {}
@@ -287,8 +287,8 @@ class InsurancePredictiveModels:
         X_test_scaled = self.scaler.transform(self.X_test)
         
         models = {
-            'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
-            'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),
+            'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000, class_weight='balanced'),
+            'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced', n_jobs=-1),
             'XGBoost': xgb.XGBClassifier(n_estimators=100, random_state=42)
         }
         
@@ -348,9 +348,9 @@ class InsurancePredictiveModels:
         X_test_scaled = self.scaler.transform(self.X_test)
         
         models = {
-            'Linear Regression': LinearRegression(),
-            'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42),
-            'XGBoost': xgb.XGBRegressor(n_estimators=100, random_state=42)
+            # 'Linear Regression': LinearRegression(),
+            'Random Forest': RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1),
+            # 'XGBoost': xgb.XGBRegressor(n_estimators=100, random_state=42)
         }
         
         results = {}

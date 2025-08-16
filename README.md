@@ -26,6 +26,9 @@ This project analyzes insurance policy and claims data to:
 - Explore distributions and outliers in premiums, claims, and vehicle values
 - Identify temporal trends in claim frequency and severity
 - Highlight vehicle makes/models associated with high or low claim amounts
+- **Build and evaluate predictive models for claim severity, claim probability, and premium optimization**
+- **Implement a dynamic, risk-based pricing system using machine learning**
+- **Interpret model results and provide actionable business insights for insurance pricing**
 
 ---
 
@@ -76,6 +79,8 @@ insurance-risk-analytics/
     1. Open `notebooks/eda_analysis.ipynb` in Jupyter or VS Code.
     2. Run all cells to generate summary statistics and plots.
 
+
+
 - **Convert raw TXT to CSV (if needed):**
     ```sh
     python src/data_loader.py
@@ -85,7 +90,10 @@ insurance-risk-analytics/
     ```sh
     python src/data_preprocessor.py
     ```
-
+- **Run Predictive Modeling notebook (Task 4):**
+    1. Open `notebooks/predictive_modeling.ipynb`.
+    2. Run all cells to build, evaluate, and interpret predictive models for risk-based pricing.
+    3. Review outputs for model performance, feature importance, and business recommendations.
 ---
 
 ## Key Features
@@ -96,6 +104,11 @@ insurance-risk-analytics/
 - **Loss Ratio Analysis:** Calculates and visualizes loss ratios by region and other factors.
 - **Temporal Analysis:** Examines trends in claims over time.
 - **Vehicle Analysis:** Identifies makes/models with highest and lowest claim amounts.
+- **Predictive Modeling:** Machine learning models for claim severity (regression), claim probability (classification), and premium optimization (regression).
+- **Risk-Based Pricing Engine:** Calculates premiums based on predicted claim probability and severity, with expense loading and profit margin.
+- **Model Evaluation:** Comprehensive metrics (RMSE, R², accuracy, precision, recall, F1-score, confusion matrix) and cross-validation.
+- **Interpretability:** SHAP analysis for feature importance and business interpretation.
+- **Business Insights:** Actionable recommendations for pricing, risk segmentation, and model deployment.
 
 ---
 
@@ -114,6 +127,11 @@ insurance-risk-analytics/
 - **Plots:** Saved in the `plots/` directory (e.g., `total_claims_hist.png`, `loss_ratio_province.png`).
 - **Summary statistics:** Printed in the EDA notebook output.
 - **Cleaned data:** Saved as CSV after preprocessing.
+- **Predictive modeling results:**
+    - Model performance metrics (RMSE, R², accuracy, F1, etc.)
+    - SHAP feature importance and business interpretation
+    - Risk-based premium calculations and comparisons
+    - Business insights and recommendations for insurance pricing
 
 ---
 
