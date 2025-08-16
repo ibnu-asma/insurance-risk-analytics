@@ -46,6 +46,10 @@ def preprocess_data(df: pd.DataFrame) -> tuple[pd.DataFrame, StandardScaler]:
     df['TotalPremium'] = df['TotalPremium'].clip(lower=0)
     df['TotalClaims'] = df['TotalClaims'].clip(lower=0)
     
+    # Save original values for reporting
+    df['TotalPremium_Original'] = df['TotalPremium']
+    df['TotalClaims_Original'] = df['TotalClaims']
+    
     # Impute missing CustomValueEstimate with median
     if 'CustomValueEstimate' in df.columns:
         df['CustomValueEstimate'] = df['CustomValueEstimate'].fillna(df['CustomValueEstimate'].median())
@@ -78,7 +82,7 @@ def load_and_preprocess(csv_path: str) -> tuple[pd.DataFrame, StandardScaler]:
     Returns:
         tuple: Preprocessed DataFrame and fitted scaler.
     """
-    df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path, low_memory=False)
     df['TransactionMonth'] = pd.to_datetime(df['TransactionMonth'], errors='coerce')
     df = engineer_features(df)
     df, scaler = preprocess_data(df)

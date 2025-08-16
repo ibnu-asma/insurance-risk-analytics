@@ -1,0 +1,34 @@
+{
+  "timestamp": "2025-06-19T05:47:07.644972",
+  "overall_compliance": "PARTIALLY_COMPLIANT",
+  "sections": {
+    "gender_pricing": {
+      "compliant": false,
+      "warnings": [
+        "Gender-based pricing is prohibited in this jurisdiction"
+      ],
+      "recommendations": [],
+      "required_actions": [
+        "Remove gender-based pricing adjustments"
+      ],
+      "risk_level": "HIGH"
+    },
+    "province_pricing": {
+      "compliant": true,
+      "warnings": [],
+      "recommendations": [
+        "Monitor for geographic discrimination"
+      ],
+      "required_actions": [
+        "Document province-based risk factors"
+      ]
+    }
+  },
+  "recommendations": [
+    "Monitor for geographic discrimination"
+  ],
+  "required_actions": [
+    "Remove gender-based pricing adjustments",
+    "Document province-based risk factors"
+  ]
+}
