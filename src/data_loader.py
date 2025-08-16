@@ -2,47 +2,90 @@ import pandas as pd
 import os
 
 def clean_number(value):
-    """Convert string numbers with comma decimals to float, handle invalid values.
-    
-    Args:
-        value: Input value (string or other).
-    
-    Returns:
-        float or pd.NA: Cleaned float value or NA for invalid inputs.
-    """
+    """Convert string numbers with comma decimals to float, handle invalid values."""
     if pd.isna(value) or value in ['', ' ', 'Not specified']:
         return pd.NA
     try:
-        # Replace comma with period and convert to float
         if isinstance(value, str):
             value = value.replace(',', '.')
         return float(value)
     except (ValueError, TypeError):
         return pd.NA
 
-def convert_txt_to_csv(txt_path: str, csv_path: str, delimiter: str = '|') -> None:
-    """Convert a pipe-separated .txt file to .csv format.
-    
-    Args:
-        txt_path (str): Path to the input .txt file.
-        csv_path (str): Path to save the output .csv file.
-        delimiter (str): Delimiter for the .txt file (default: pipe).
-    """
-    # Read with CapitalOutstanding as string to avoid casting errors
-    dtypes = {
-        'CapitalOutstanding': 'object',  # Column 32
-        'CrossBorder': 'category'       # Column 37
+def get_dtype_dict():
+    """Return dtype dictionary for all columns."""
+    return {
+        'UnderwrittenCoverID': 'int64',
+        'PolicyID': 'int64',
+        'TransactionMonth': 'object',  # Handle as datetime later
+        'IsVATRegistered': 'category',
+        'Citizenship': 'category',
+        'LegalType': 'category',
+        'Title': 'category',
+        'Language': 'category',
+        'Bank': 'category',
+        'AccountType': 'category',
+        'MaritalStatus': 'category',
+        'Gender': 'category',
+        'Country': 'category',
+        'Province': 'category',
+        'PostalCode': 'category',
+        'MainCrestaZone': 'category',
+        'SubCrestaZone': 'category',
+        'ItemType': 'category',
+        'mmcode': 'category',
+        'VehicleType': 'category',
+        'RegistrationYear': 'int32',
+        'make': 'category',
+        'Model': 'category',
+        'Cylinders': 'float32',
+        'cubiccapacity': 'float32',
+        'kilowatts': 'float32',
+        'bodytype': 'category',
+        'NumberOfDoors': 'float32',
+        'VehicleIntroDate': 'category',
+        'CustomValueEstimate': 'float32',
+        'AlarmImmobiliser': 'category',
+        'TrackingDevice': 'category',
+        'CapitalOutstanding': 'object',  # Clean later
+        'NewVehicle': 'category',
+        'WrittenOff': 'category',
+        'Rebuilt': 'category',
+        'Converted': 'category',
+        'CrossBorder': 'category',
+        'NumberOfVehiclesInFleet': 'float32',
+        'SumInsured': 'float32',
+        'TermFrequency': 'category',
+        'CalculatedPremiumPerTerm': 'float32',
+        'ExcessSelected': 'category',
+        'CoverCategory': 'category',
+        'CoverType': 'category',
+        'CoverGroup': 'category',
+        'Section': 'category',
+        'Product': 'category',
+        'StatutoryClass': 'category',
+        'StatutoryRiskType': 'category',
+        'TotalPremium': 'float32',
+        'TotalClaims': 'float32'
     }
+
+def convert_txt_to_csv(txt_path: str, csv_path: str, delimiter: str = '|') -> None:
+    """Convert a pipe-separated .txt file to .csv format."""
+    dtype_dict = get_dtype_dict()
     
     try:
-        df = pd.read_csv(txt_path, delimiter=delimiter, encoding='utf-8', dtype=dtypes, low_memory=False)
+        df = pd.read_csv(txt_path, delimiter=delimiter, encoding='utf-8', dtype=dtype_dict, low_memory=False)
     except UnicodeDecodeError:
-        df = pd.read_csv(txt_path, delimiter=delimiter, encoding='latin1', dtype=dtypes, low_memory=False)
+        df = pd.read_csv(txt_path, delimiter=delimiter, encoding='latin1', dtype=dtype_dict, low_memory=False)
     
-    # Replace empty strings and placeholders with NaN
-    df.replace(['', ' ', 'Not specified'], pd.NA, inplace=True)
+    # Standardize categorical columns before saving
+    categorical_cols = ['MaritalStatus', 'Gender', 'CrossBorder']
+    for col in categorical_cols:
+        if col in df.columns:
+            df[col] = df[col].astype('category').cat.add_categories(['']).fillna('')
     
-    # Clean CapitalOutstanding
+    df.replace(['', 'Not specified'], pd.NA, inplace=True)
+    
     if 'CapitalOutstanding' in df.columns:
         df['CapitalOutstanding'] = df['CapitalOutstanding'].apply(clean_number)
     
@@ -50,36 +93,16 @@ def convert_txt_to_csv(txt_path: str, csv_path: str, delimiter: str = '|') -> No
     print(f"Converted {txt_path} to {csv_path}")
 
 def load_data(csv_path: str) -> pd.DataFrame:
-    """Load insurance data from a .csv file and set appropriate data types.
+    """Load insurance data from a .csv file and set appropriate data types."""
+    dtype_dict = get_dtype_dict()
     
-    Args:
-        csv_path (str): Path to the .csv file.
+    df = pd.read_csv(csv_path, dtype=dtype_dict, low_memory=False)
     
-    Returns:
-        pd.DataFrame: Loaded and preprocessed DataFrame.
-    """
-    df = pd.read_csv(csv_path)
-    
-    # Convert TransactionMonth to datetime
     if 'TransactionMonth' in df.columns:
         df['TransactionMonth'] = pd.to_datetime(df['TransactionMonth'], errors='coerce')
     
-    # Convert categorical columns
-    categorical_cols = [
-        'Province', 'Gender', 'VehicleType', 'make', 'Model', 'CoverType',
-        'IsVATRegistered', 'Citizenship', 'LegalType', 'Title', 'Language',
-        'Bank', 'AccountType', 'MaritalStatus', 'MainCrestaZone', 'SubCrestaZone',
-        'CrossBorder'
-    ]
-    for col in categorical_cols:
-        if col in df.columns:
-            df[col] = df[col].astype('category')
-    
-    # Ensure numerical columns are float
-    numerical_cols = ['CapitalOutstanding', 'TotalPremium', 'TotalClaims', 'SumInsured', 'kilowatts', 'CustomValueEstimate']
-    for col in numerical_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+    if 'CapitalOutstanding' in df.columns:
+        df['CapitalOutstanding'] = df['CapitalOutstanding'].apply(clean_number)
     
     return df
 
