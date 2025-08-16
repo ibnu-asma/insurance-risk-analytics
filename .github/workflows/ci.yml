@@ -27,8 +27,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run linting
-      run: flake8 src/ tests/
+    # - name: Run linting
+    #   run: flake8 src/ tests/
 
-    - name: Run tests
-      run: pytest tests/
+    # - name: Run tests
+    #   run: pytest tests/

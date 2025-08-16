@@ -33,12 +33,17 @@ ENV/
 # Data
 data/raw/*
 !data/raw/.gitkeep
+data/
+data/*.csv
+data/*.txt
+
 
 # Environment variables
 .env
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/plots/
 
 # Logs
 logs/
