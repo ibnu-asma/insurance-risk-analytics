@@ -43,7 +43,7 @@ data/*.txt
 
 # Jupyter Notebook
 .ipynb_checkpoints
-notebooks/plots/
+# notebooks/plots/
 
 # Logs
 logs/
