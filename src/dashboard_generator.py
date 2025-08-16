@@ -9,6 +9,8 @@ warnings.filterwarnings('ignore')
 class RiskPricingDashboard:
     """Dashboard generator for risk-based pricing analysis."""
     
+
+    
     def __init__(self, df: pd.DataFrame, risk_adjusted_df: pd.DataFrame = None):
         self.df = df
         self.risk_adjusted_df = risk_adjusted_df or df
