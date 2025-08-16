@@ -78,7 +78,7 @@ def load_and_preprocess(csv_path: str) -> tuple[pd.DataFrame, StandardScaler]:
     Returns:
         tuple: Preprocessed DataFrame and fitted scaler.
     """
-    df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path, low_memory=False)
     df['TransactionMonth'] = pd.to_datetime(df['TransactionMonth'], errors='coerce')
     df = engineer_features(df)
     df, scaler = preprocess_data(df)
