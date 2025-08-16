@@ -34,6 +34,9 @@ ENV/
 data/raw/*
 !data/raw/.gitkeep
 data/
+data/*.csv
+data/*.txt
+
 
 # Environment variables
 .env
